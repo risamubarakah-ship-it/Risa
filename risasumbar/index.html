@@ -1857,7 +1857,7 @@
             </div>
             <div class="form-group">
               <label>Pilih Tempat</label>
-              <select id="bookingLocation" required>
+              <select id="bookingLocation" required onchange="calculateTotal()">
                 <option value="">Pilih lokasi</option>
                 <option value="RUANG KERJA Cafe Central">
                   RUANG KERJA Cafe Central - Jl. Pemuda No. 15
@@ -1882,7 +1882,7 @@
             </div>
             <div class="form-group">
               <label>Berapa Lama</label>
-              <select id="bookingDuration" required>
+              <select id="bookingDuration" required onchange="calculateTotal()">
                 <option value="">Pilih durasi</option>
                 <option value="2">2 Jam</option>
                 <option value="3">3 Jam</option>
@@ -1892,6 +1892,17 @@
                 <option value="7">7 Jam</option>
                 <option value="8">8 Jam</option>
               </select>
+            </div>
+            <!-- Added total cost field -->
+            <div class="form-group">
+              <label>Total Biaya</label>
+              <input
+                type="text"
+                id="bookingTotal"
+                placeholder="Pilih lokasi dan durasi untuk melihat total"
+                readonly
+                style="background-color: #e9ecef; cursor: not-allowed"
+              />
             </div>
             <div class="form-group">
               <label>Catatan (Opsional)</label>
@@ -1918,6 +1929,10 @@
             <h2>Terima Kasih!</h2>
             <p>Booking Anda telah dicatat dengan ID:</p>
             <div class="booking-id" id="displayBookingId"></div>
+            <div
+              id="displayBookingTotal"
+              style="font-size: 1.5rem; font-weight: bold; margin: 1rem 0"
+            ></div>
 
             <div class="important-notice">
               <h3>⚠️ PENTING: SIMPAN ID BOOKING ANDA</h3>
@@ -2699,6 +2714,33 @@
     <script>
       let isSubmitting = false;
 
+      // Prices per hour for each venue
+      const venuePrices = {
+        "RUANG KERJA Cafe Central": 20000,
+        "RUANG KERJA Garden Cafe": 25000,
+        "RUANG KERJA Premium Hub": 35000,
+      };
+
+      function calculateTotal() {
+        const locationSelect = document.getElementById("bookingLocation");
+        const durationSelect = document.getElementById("bookingDuration");
+        const totalInput = document.getElementById("bookingTotal");
+
+        const location = locationSelect.value;
+        const duration = parseInt(durationSelect.value);
+
+        if (location && duration && venuePrices[location]) {
+          const total = venuePrices[location] * duration;
+          totalInput.value = new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+            minimumFractionDigits: 0,
+          }).format(total);
+        } else {
+          totalInput.value = "Pilih lokasi dan durasi untuk melihat total";
+        }
+      }
+
       function initializeData() {
         // Set minimum date to today
         const today = new Date().toISOString().split("T")[0];
@@ -2756,6 +2798,7 @@
           const locationSelect = document.getElementById("bookingLocation");
           if (locationSelect) {
             locationSelect.value = venueName;
+            calculateTotal(); // Recalculate total when venue is selected
           }
         }, 100);
       }
@@ -2781,6 +2824,7 @@
           const time = document.getElementById("bookingTime").value;
           const duration = document.getElementById("bookingDuration").value;
           const notes = document.getElementById("bookingNotes").value;
+          const total = document.getElementById("bookingTotal").value;
 
           // Validate required fields
           if (
@@ -2790,7 +2834,8 @@
             !location ||
             !date ||
             !time ||
-            !duration
+            !duration ||
+            !total
           ) {
             alert("Mohon lengkapi semua field yang wajib diisi.");
             hideLoadingOverlay();
@@ -2812,6 +2857,7 @@
             time: time,
             duration: duration + " jam",
             notes: notes,
+            total: total,
             timestamp: new Date().toLocaleString("id-ID"),
           };
 
@@ -2844,6 +2890,29 @@
           const displayBookingId = document.getElementById("displayBookingId");
           if (displayBookingId) {
             displayBookingId.textContent = bookingId;
+          }
+
+          // Display total on payment page
+          const displayBookingTotal = document.getElementById(
+            "displayBookingTotal"
+          );
+          if (displayBookingTotal) {
+            displayBookingTotal.innerHTML = `Total Pembayaran: <strong>${total}</strong>`;
+          }
+
+          // Update DP amount on payment page
+          const dpRequirement = document.querySelector(".dp-requirement h4");
+          if (dpRequirement) {
+            const numericTotal = parseInt(total.replace(/[^0-9]/g, ""));
+            if (!isNaN(numericTotal)) {
+              const dpAmount = numericTotal * 0.5;
+              const formattedDp = new Intl.NumberFormat("id-ID", {
+                style: "currency",
+                currency: "IDR",
+                minimumFractionDigits: 0,
+              }).format(dpAmount);
+              dpRequirement.innerHTML = `💰 DP WAJIB 50% (${formattedDp})`;
+            }
           }
 
           // Setup WhatsApp button
