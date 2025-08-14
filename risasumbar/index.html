@@ -1,0 +1,2591 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CWS - Co-Working Space Cafe Padang</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        line-height: 1.6;
+        color: #333;
+        /* Improved gradient background like GitHub style */
+        background: linear-gradient(
+          135deg,
+          #ffffff 0%,
+          #fff7ed 20%,
+          #fed7aa 40%,
+          #fdba74 60%,
+          #f97316 80%,
+          #ea580c 100%
+        );
+        background-attachment: fixed;
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+
+      .navbar {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+        padding: 1rem 0;
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        font-family: "Playfair Display", serif;
+        font-size: 2rem;
+        font-weight: 700;
+        color: #d97706;
+        text-decoration: none;
+      }
+
+      .nav-menu {
+        display: flex;
+        list-style: none;
+        gap: 2rem;
+      }
+
+      .nav-menu a {
+        text-decoration: none;
+        color: #374151;
+        font-weight: 500;
+        transition: color 0.3s;
+        cursor: pointer;
+      }
+
+      .nav-menu a:hover {
+        color: #d97706;
+      }
+
+      .nav-toggle {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+      }
+
+      .nav-toggle span {
+        width: 25px;
+        height: 3px;
+        background: #374151;
+        margin: 3px 0;
+        transition: 0.3s;
+      }
+
+      /* Page System */
+      .page {
+        display: none;
+        min-height: 100vh;
+        padding-top: 80px;
+      }
+
+      .page.active {
+        display: block;
+      }
+
+      /* Updated hero section to match kolega.co reference with separate areas */
+      .hero {
+        /* Changed from fixed height to min-height for better zoom compatibility */
+        min-height: 100vh;
+        height: auto;
+        display: flex;
+        align-items: stretch;
+        position: relative;
+        overflow: hidden;
+        background: none; /* Remove gradient background */
+      }
+
+      .hero-slideshow {
+        width: 60%;
+        height: 100vh; /* Explicit height for slideshow */
+        min-height: 500px; /* Minimum height fallback */
+        position: relative;
+        z-index: 1;
+      }
+
+      .hero-slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
+      }
+
+      .hero-slide.active {
+        opacity: 1;
+      }
+
+      /* Content area with white background, completely separate from slideshow */
+      .hero-content {
+        width: 40%;
+        background: white;
+        /* Reduced padding and adjusted sizing for better zoom compatibility */
+        padding: 2rem 1.5rem;
+        color: #374151;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
+        z-index: 2;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
+        box-sizing: border-box;
+        /* Adjusted max-width and removed margin for better fit */
+        max-width: 450px;
+        overflow-y: auto;
+      }
+
+      .hero-content h1 {
+        font-family: "Playfair Display", serif;
+        /* Reduced font size for better fit at high zoom */
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: #1f2937;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        /* Added word-break for better text wrapping */
+        word-break: break-word;
+      }
+
+      .hero-content .subtitle {
+        /* Reduced subtitle font size */
+        font-size: 1.3rem;
+        color: #6b7280;
+        margin-bottom: 1rem;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        word-break: break-word;
+      }
+
+      .hero-content p {
+        font-size: 1rem;
+        /* Reduced margin for better spacing */
+        margin-bottom: 1.5rem;
+        color: #374151;
+        line-height: 1.6;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
+        word-break: break-word;
+      }
+
+      .hero-content h3 {
+        color: #f97316 !important;
+        /* Reduced margin for better spacing */
+        margin-bottom: 0.8rem;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        word-break: break-word;
+      }
+
+      .hero-content ul {
+        color: #374151 !important;
+        margin-left: 1rem;
+        /* Reduced bottom margin */
+        margin-bottom: 1.5rem;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
+        width: 100%;
+        box-sizing: border-box;
+        /* Added max-width to prevent overflow */
+        max-width: calc(100% - 2rem);
+      }
+
+      .hero-content ul li {
+        /* Reduced margin between list items */
+        margin-bottom: 0.3rem;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
+        width: 100%;
+        box-sizing: border-box;
+        word-break: break-word;
+        /* Added max-width to prevent text overflow */
+        max-width: 100%;
+        padding-right: 1rem;
+      }
+
+      /* Added CTA button styling for hero section */
+      .hero-cta {
+        background: #f97316;
+        color: white;
+        border: none;
+        /* Reduced padding for better fit */
+        padding: 0.8rem 2rem;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        /* Added margin-top auto to push button to bottom */
+        margin-top: auto;
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .hero-cta:hover {
+        background: #ea580c;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+      }
+
+      .hero-form {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .hero-form input,
+      .hero-form select {
+        padding: 0.75rem;
+        border: 1px solid #d1d5db;
+        border-radius: 5px;
+        font-size: 0.9rem;
+      }
+
+      .hero-form .full-width {
+        grid-column: 1 / -1;
+      }
+
+      /* Features Section */
+      .features {
+        padding: 5rem 0;
+        background: rgba(249, 250, 251, 0.9);
+        backdrop-filter: blur(10px);
+      }
+
+      .features h2 {
+        font-family: "Playfair Display", serif;
+        font-size: 2.5rem;
+        text-align: center;
+        margin-bottom: 3rem;
+        color: #374151;
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+      }
+
+      .feature-card {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        padding: 2rem;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .feature-card i {
+        font-size: 3rem;
+        color: #d97706;
+        margin-bottom: 1rem;
+      }
+
+      .feature-card h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: #374151;
+      }
+
+      /* Testimonials */
+      .testimonials {
+        padding: 5rem 0;
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+      }
+
+      .testimonials h2 {
+        font-family: "Playfair Display", serif;
+        font-size: 2.5rem;
+        text-align: center;
+        margin-bottom: 3rem;
+        color: #374151;
+      }
+
+      .testimonials-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+      }
+
+      .testimonial-card {
+        background: rgba(249, 250, 251, 0.9);
+        backdrop-filter: blur(10px);
+        padding: 2rem;
+        border-radius: 15px;
+        border-left: 4px solid #d97706;
+      }
+
+      .testimonial-card p {
+        font-style: italic;
+        margin-bottom: 1rem;
+        color: #6b7280;
+      }
+
+      .testimonial-author {
+        font-weight: 600;
+        color: #374151;
+      }
+
+      /* Partners */
+      .partners {
+        padding: 3rem 0;
+        background: rgba(249, 250, 251, 0.9);
+        backdrop-filter: blur(10px);
+      }
+
+      .partners h2 {
+        font-family: "Playfair Display", serif;
+        font-size: 2rem;
+        text-align: center;
+        margin-bottom: 2rem;
+        color: #374151;
+      }
+
+      .partners-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 2rem;
+        align-items: center;
+      }
+
+      .partner-logo {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        padding: 1rem;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .partner-logo img {
+        max-width: 100%;
+        max-height: 60px;
+        object-fit: contain;
+      }
+
+      /* Search Page */
+      .search-header {
+        background: linear-gradient(135deg, #d97706, #f59e0b);
+        color: white;
+        padding: 2rem 0;
+        text-align: center;
+      }
+
+      .search-form {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 2rem;
+        border-radius: 15px;
+        margin-top: -1rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        align-items: end;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .form-group label {
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: #374151;
+      }
+
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        padding: 0.75rem;
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-family: inherit;
+      }
+
+      .search-button {
+        background: #d97706;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s;
+      }
+
+      .search-button:hover {
+        background: #b45309;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(217, 119, 6, 0.3);
+      }
+
+      .workspace-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+        padding: 2rem 0;
+      }
+
+      .workspace-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+        cursor: pointer;
+      }
+
+      .workspace-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .workspace-image {
+        height: 200px;
+        background-size: cover;
+        background-position: center;
+      }
+
+      .workspace-info {
+        padding: 1.5rem;
+      }
+
+      .workspace-info h3 {
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+        color: #374151;
+      }
+
+      .workspace-info p {
+        color: #6b7280;
+        margin-bottom: 1rem;
+      }
+
+      .workspace-price {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #d97706;
+        margin-bottom: 1rem;
+      }
+
+      .workspace-features {
+        margin-bottom: 1rem;
+      }
+
+      .feature-tag {
+        background: #fef3c7;
+        color: #92400e;
+        padding: 0.25rem 0.5rem;
+        border-radius: 15px;
+        font-size: 0.875rem;
+        margin-right: 0.5rem;
+      }
+
+      .whatsapp-float {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #25d366;
+        color: white;
+        border-radius: 50px;
+        padding: 15px 20px;
+        box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s;
+      }
+
+      .whatsapp-float:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+      }
+
+      .whatsapp-float i {
+        font-size: 1.5rem;
+      }
+
+      .booking-form {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        margin: 2rem auto;
+      }
+
+      .booking-form h2 {
+        font-family: "Playfair Display", serif;
+        color: #374151;
+        margin-bottom: 2rem;
+        text-align: center;
+      }
+
+      .success-message {
+        background: #d1fae5;
+        color: #065f46;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        text-align: center;
+        display: none;
+      }
+
+      /* Fixed footer responsive issues */
+      .footer {
+        background: linear-gradient(135deg, #1f2937, #374151);
+        color: white;
+        padding: 3rem 0 1rem;
+        margin-top: 3rem;
+      }
+
+      .footer-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+      }
+
+      .footer-section h3 {
+        font-family: "Playfair Display", serif;
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+        color: #f59e0b;
+      }
+
+      .footer-section ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      .footer-section ul li {
+        margin-bottom: 0.5rem;
+      }
+
+      .footer-section ul li a {
+        color: #d1d5db;
+        text-decoration: none;
+        transition: color 0.3s;
+      }
+
+      .footer-section ul li a:hover {
+        color: #f59e0b;
+      }
+
+      .footer-bottom {
+        text-align: center;
+        padding-top: 2rem;
+        border-top: 1px solid #374151;
+        color: #9ca3af;
+      }
+
+      /* Improved responsive design */
+      @media (max-width: 768px) {
+        .nav-menu {
+          position: fixed;
+          left: -100%;
+          top: 70px;
+          flex-direction: column;
+          background-color: white;
+          width: 100%;
+          text-align: center;
+          transition: 0.3s;
+          box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
+          padding: 2rem 0;
+          z-index: 1000;
+        }
+
+        .nav-menu.active {
+          left: 0;
+        }
+
+        .nav-toggle {
+          display: flex;
+          cursor: pointer;
+          z-index: 1001;
+        }
+
+        /* Fixed mobile responsive layout to match booking form exactly */
+        .hero {
+          flex-direction: column;
+          /* Use min-height for mobile too */
+          min-height: 100vh;
+          height: auto;
+        }
+
+        .hero-slideshow {
+          width: 100%;
+          height: 40vh; /* Keep mobile height */
+          min-height: 300px; /* Minimum height for mobile */
+        }
+
+        .hero-content {
+          width: 100%;
+          max-width: 400px;
+          margin: 0 auto;
+          padding: 2rem 1.5rem;
+          background: white;
+          /* Changed text-align from center to left for mobile */
+          text-align: left;
+          border-radius: 15px;
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+          box-sizing: border-box;
+          position: relative;
+          z-index: 2;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+          hyphens: auto;
+          overflow: visible;
+        }
+
+        /* Added left alignment for all text elements in mobile */
+        .hero-content h1 {
+          font-size: 2rem;
+          margin-bottom: 1rem;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+          word-break: break-word;
+          text-align: left;
+        }
+
+        .hero-content .subtitle {
+          text-align: left;
+        }
+
+        .hero-content p {
+          font-size: 1rem;
+          line-height: 1.6;
+          margin-bottom: 1.5rem;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+          hyphens: auto;
+          word-break: break-word;
+          text-align: left;
+        }
+
+        .hero-content h3 {
+          text-align: left;
+        }
+
+        .hero-content ul {
+          text-align: left;
+          margin: 0 auto 1.5rem auto;
+          max-width: 100%;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+          hyphens: auto;
+          width: 100%;
+          box-sizing: border-box;
+          padding-left: 1rem;
+        }
+
+        .hero-content ul li {
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+          hyphens: auto;
+          width: 100%;
+          box-sizing: border-box;
+          word-break: break-word;
+          max-width: calc(100% - 1rem);
+          text-align: left;
+        }
+
+        /* Added mobile CTA button styling */
+        .hero-cta {
+          width: 100%;
+          margin-top: 1rem;
+          /* Reduced padding for mobile */
+          padding: 0.8rem;
+          font-size: 1rem;
+        }
+
+        .whatsapp-float span {
+          display: none;
+        }
+
+        /* Ensure body doesn't have horizontal overflow */
+        body {
+          overflow-x: hidden;
+        }
+
+        .auth-container {
+          padding: 1.5rem;
+          margin: 1rem;
+        }
+
+        .footer-content {
+          grid-template-columns: 1fr;
+          text-align: center;
+        }
+      }
+
+      /* Added floating particles animation for partner section */
+      .particles-container {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .particle {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background: linear-gradient(45deg, #f59e0b, #d97706);
+        border-radius: 2px;
+        animation: float 6s infinite linear;
+        opacity: 0.7;
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(100vh) rotate(0deg);
+          opacity: 0;
+        }
+        10% {
+          opacity: 0.7;
+        }
+        90% {
+          opacity: 0.7;
+        }
+        100% {
+          transform: translateY(-100px) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      /* Improved responsive design for auth forms */
+      .auth-container {
+        max-width: 400px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .social-login {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .social-btn {
+        padding: 0.75rem;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        background: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+      }
+
+      .social-btn:hover {
+        background: #f9fafb;
+        transform: translateY(-2px);
+      }
+
+      /* Better mobile responsive for auth forms */
+      @media (max-width: 768px) {
+        .auth-container {
+          margin: 1rem;
+          padding: 1.5rem;
+        }
+
+        .social-login {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* Removed duplicate and conflicting hero-content CSS */
+      /* Removed conflicting hero-content definition that was causing layout issues */
+
+      /* Added mobile left alignment for footer */
+      @media (max-width: 768px) {
+        .footer-section {
+          text-align: left;
+        }
+
+        .footer-section h3 {
+          text-align: left;
+        }
+
+        .footer-section p {
+          text-align: left;
+        }
+
+        .footer-section ul {
+          text-align: left;
+        }
+
+        .footer-bottom {
+          text-align: left;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Removed About from navbar -->
+    <nav class="navbar">
+      <div class="container">
+        <div class="nav-container">
+          <a href="#" class="logo" onclick="showPage('home')">CWS</a>
+          <ul class="nav-menu" id="nav-menu">
+            <li><a onclick="showPage('home')">Beranda</a></li>
+            <li><a onclick="showPage('search')">Cari Tempat</a></li>
+            <li><a onclick="showPage('booking')">Booking</a></li>
+            <li><a onclick="showPage('blog')">Blog</a></li>
+            <li><a onclick="showPage('contact')">Kontak</a></li>
+            <li><a onclick="showPage('login')">Masuk</a></li>
+          </ul>
+          <div class="nav-toggle" id="nav-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <a
+      href="https://wa.me/6281234567890?text=Halo%20CWS,%20saya%20ingin%20bertanya%20tentang%20co-working%20space"
+      class="whatsapp-float"
+      target="_blank"
+    >
+      <i class="fab fa-whatsapp"></i>
+      <span>Hubungi Kami</span>
+    </a>
+
+    <!-- Homepage -->
+    <div id="home" class="page active">
+      <!-- Replaced form with About content in hero section -->
+      <section class="hero">
+        <div class="hero-slideshow">
+          <div
+            class="hero-slide active"
+            style="
+              background-image: url('https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            "
+          ></div>
+          <div
+            class="hero-slide"
+            style="
+              background-image: url('https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            "
+          ></div>
+          <div
+            class="hero-slide"
+            style="
+              background-image: url('https://images.unsplash.com/photo-1517502884422-41eaead166d4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            "
+          ></div>
+          <div
+            class="hero-slide"
+            style="
+              background-image: url('https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            "
+          ></div>
+        </div>
+        <div class="hero-content">
+          <h1>Tentang CWS</h1>
+          <div class="subtitle">Co-Working Space</div>
+          <p>
+            Co-Working Space dengan konsep cafe terdekat di Padang, Sumatera
+            Barat. Ruang kerja nyaman dengan suasana cafe di jantung kota
+            Padang.
+          </p>
+
+          <h3>Visi Kami</h3>
+          <p>
+            Menjadi platform co-working space terdekat di Sumatera Barat yang
+            menggabungkan produktivitas kerja dengan kenyamanan suasana cafe.
+          </p>
+
+          <h3>Mengapa Memilih CWS?</h3>
+          <ul>
+            <li>Ruang kerja berkualitas dengan fasilitas modern</li>
+            <li>Suasana cafe yang nyaman dan produktif</li>
+            <li>Lokasi strategis di pusat kota Padang</li>
+            <li>Komunitas profesional yang saling mendukung</li>
+          </ul>
+
+          /* Added missing CTA button */
+          <button class="hero-cta" onclick="showPage('search')">
+            Cari Tempat Sekarang
+          </button>
+        </div>
+      </section>
+
+      <!-- Features Section -->
+      <section class="features">
+        <div class="container">
+          <h2>Keunggulan CWS</h2>
+          <div class="features-grid">
+            <div class="feature-card">
+              <i class="fas fa-bolt"></i>
+              <h3>Reservasi Cepat</h3>
+              <p>
+                Booking online dalam hitungan menit. Sistem otomatis yang mudah
+                dan efisien.
+              </p>
+            </div>
+            <div class="feature-card">
+              <i class="fas fa-map-marker-alt"></i>
+              <h3>Lokasi Strategis</h3>
+              <p>
+                Berada di pusat kota Padang dengan akses mudah ke berbagai
+                fasilitas umum.
+              </p>
+            </div>
+            <div class="feature-card">
+              <i class="fas fa-wifi"></i>
+              <h3>Fasilitas Lengkap</h3>
+              <p>
+                WiFi super cepat, colokan listrik, AC, ruang meeting, dan kopi
+                premium.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Testimonials -->
+      <section class="testimonials">
+        <div class="container">
+          <h2>Testimoni Pengguna</h2>
+          <div class="testimonials-grid">
+            <div class="testimonial-card">
+              <p>
+                "CWS adalah tempat kerja terbaik di Padang! Suasana cafe yang
+                nyaman membuat saya lebih produktif. WiFi cepat dan kopi enak!"
+              </p>
+              <div class="testimonial-author">- Andi Pratama, Freelancer</div>
+            </div>
+            <div class="testimonial-card">
+              <p>
+                "Tim kami sering meeting di CWS. Ruang meeting yang nyaman dan
+                fasilitas presentasi yang lengkap. Highly recommended!"
+              </p>
+              <div class="testimonial-author">
+                - Sari Indah, Startup Founder
+              </div>
+            </div>
+            <div class="testimonial-card">
+              <p>
+                "Sebagai digital nomad, CWS memberikan pengalaman kerja yang
+                luar biasa. Komunitas yang supportif dan lingkungan yang
+                inspiratif."
+              </p>
+              <div class="testimonial-author">
+                - Reza Maulana, Content Creator
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Added animated particles and new partner logos -->
+      <section class="partners particles-container">
+        <div class="container">
+          <h2>Partner Cafe Kami</h2>
+          <div class="partners-grid">
+            <div class="partner-logo">
+              <img
+                src="https://logos-world.net/wp-content/uploads/2021/08/HappyFresh-Logo.png"
+                alt="Happy Fresh"
+                style="max-height: 40px"
+              />
+            </div>
+            <div class="partner-logo">
+              <img
+                src="https://logos-world.net/wp-content/uploads/2020/11/Shopee-Logo.png"
+                alt="Shopee"
+                style="max-height: 40px"
+              />
+            </div>
+            <div class="partner-logo">
+              <img
+                src="https://logos-world.net/wp-content/uploads/2020/11/Tokopedia-Logo.png"
+                alt="Tokopedia"
+                style="max-height: 40px"
+              />
+            </div>
+            <div class="partner-logo">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/JD.id_logo.svg/1200px-JD.id_logo.svg.png"
+                alt="JD.ID"
+                style="max-height: 40px"
+              />
+            </div>
+            <div class="partner-logo">
+              <img
+                src="https://logos-world.net/wp-content/uploads/2022/04/Otsuka-Logo.png"
+                alt="Otsuka"
+                style="max-height: 40px"
+              />
+            </div>
+            <div class="partner-logo">
+              <img
+                src="https://logos-world.net/wp-content/uploads/2020/06/Red-Bull-Logo.png"
+                alt="Red Bull"
+                style="max-height: 40px"
+              />
+            </div>
+            <div class="partner-logo">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Ruangguru-logo.svg/1200px-Ruangguru-logo.svg.png"
+                alt="Ruang Guru"
+                style="max-height: 40px"
+              />
+            </div>
+            <div class="partner-logo">
+              <img
+                src="https://logos-world.net/wp-content/uploads/2020/11/Blibli-Logo.png"
+                alt="Blibli"
+                style="max-height: 40px"
+              />
+            </div>
+            <div class="partner-logo">
+              <img
+                src="https://logos-world.net/wp-content/uploads/2020/11/Bukalapak-Logo.png"
+                alt="Bukalapak"
+                style="max-height: 40px"
+              />
+            </div>
+            <div class="partner-logo">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Xiaomi_logo_%282021-%29.svg/1200px-Xiaomi_logo_%282021-%29.svg.png"
+                alt="Xiaomi"
+                style="max-height: 40px"
+              />
+            </div>
+            <div class="partner-logo">
+              <img
+                src="https://logos-world.net/wp-content/uploads/2020/08/Samsung-Logo.png"
+                alt="Samsung"
+                style="max-height: 40px"
+              />
+            </div>
+            <div class="partner-logo">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Kopi_Nako_logo.png/1200px-Kopi_Nako_logo.png"
+                alt="Kopi Nako"
+                style="max-height: 40px"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Search Page -->
+    <div id="search" class="page">
+      <div class="search-header">
+        <div class="container">
+          <h1>Cari Ruang Kerja Ideal Anda</h1>
+          <p>
+            Temukan co-working space dengan fasilitas cafe terbaik di Padang
+          </p>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="search-form">
+          <div class="form-group">
+            <label>Lokasi</label>
+            <select>
+              <option>Semua Lokasi</option>
+              <option>Padang Barat</option>
+              <option>Padang Timur</option>
+              <option>Padang Utara</option>
+              <option>Padang Selatan</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Harga</label>
+            <select>
+              <option>Semua Harga</option>
+              <option>< Rp 20.000</option>
+              <option>Rp 20.000 - 50.000</option>
+              <option>> Rp 50.000</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Fasilitas</label>
+            <select>
+              <option>Semua Fasilitas</option>
+              <option>WiFi + Colokan</option>
+              <option>Ruang Meeting</option>
+              <option>Printer</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Jam Operasional</label>
+            <select>
+              <option>24 Jam</option>
+              <option>Pagi - Sore</option>
+              <option>Sore - Malam</option>
+            </select>
+          </div>
+          <button class="search-button">Cari</button>
+        </div>
+
+        <div class="workspace-grid">
+          <div
+            class="workspace-card"
+            onclick="showWorkspaceDetail('workspace1')"
+          >
+            <div
+              class="workspace-image"
+              style="
+                background-image: url('https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=350&q=80');
+              "
+            ></div>
+            <div class="workspace-info">
+              <h3>CWS Cafe Central</h3>
+              <p>
+                <i class="fas fa-map-marker-alt"></i> Jl. Pemuda No. 15, Padang
+                Barat
+              </p>
+              <div class="workspace-price">Rp 25.000/jam</div>
+              <div class="workspace-features">
+                <span class="feature-tag">WiFi</span>
+                <span class="feature-tag">Colokan</span>
+                <span class="feature-tag">AC</span>
+              </div>
+              <button class="cta-button" style="width: 100%">
+                Lihat Detail
+              </button>
+            </div>
+          </div>
+
+          <div
+            class="workspace-card"
+            onclick="showWorkspaceDetail('workspace2')"
+          >
+            <div
+              class="workspace-image"
+              style="
+                background-image: url('https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-4.0.3&auto=format&fit=crop&w=350&q=80');
+              "
+            ></div>
+            <div class="workspace-info">
+              <h3>CWS Garden Cafe</h3>
+              <p>
+                <i class="fas fa-map-marker-alt"></i> Jl. Diponegoro No. 28,
+                Padang Timur
+              </p>
+              <div class="workspace-price">Rp 30.000/jam</div>
+              <div class="workspace-features">
+                <span class="feature-tag">WiFi</span>
+                <span class="feature-tag">Meeting Room</span>
+                <span class="feature-tag">Outdoor</span>
+              </div>
+              <button class="cta-button" style="width: 100%">
+                Lihat Detail
+              </button>
+            </div>
+          </div>
+
+          <div
+            class="workspace-card"
+            onclick="showWorkspaceDetail('workspace3')"
+          >
+            <div
+              class="workspace-image"
+              style="
+                background-image: url('https://images.unsplash.com/photo-1517502884422-41eaead166d4?ixlib=rb-4.0.3&auto=format&fit=crop&w=350&q=80');
+              "
+            ></div>
+            <div class="workspace-info">
+              <h3>CWS Premium Hub</h3>
+              <p>
+                <i class="fas fa-map-marker-alt"></i> Jl. Sudirman No. 45,
+                Padang Utara
+              </p>
+              <div class="workspace-price">Rp 45.000/jam</div>
+              <div class="workspace-features">
+                <span class="feature-tag">WiFi</span>
+                <span class="feature-tag">Printer</span>
+                <span class="feature-tag">Coffee Bar</span>
+              </div>
+              <button class="cta-button" style="width: 100%">
+                Lihat Detail
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Workspace Detail -->
+    <div id="workspace-detail" class="page">
+      <div
+        class="detail-header"
+        style="background-image: url('/placeholder.svg?height=400&width=1200')"
+      >
+        <div class="detail-overlay">
+          <div class="container">
+            <h1 id="workspace-title">CWS Cafe Central</h1>
+            <p>
+              <i class="fas fa-map-marker-alt"></i> Jl. Pemuda No. 15, Padang
+              Barat
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="detail-content">
+          <div class="detail-grid">
+            <div class="detail-info">
+              <h2>Tentang Tempat Ini</h2>
+              <p>
+                CWS Cafe Central adalah co-working space dengan konsep cafe yang
+                nyaman di jantung kota Padang. Dilengkapi dengan fasilitas
+                modern dan suasana yang mendukung produktivitas tinggi.
+              </p>
+
+              <h3>Fasilitas</h3>
+              <ul>
+                <li><i class="fas fa-wifi"></i> WiFi Super Cepat (100 Mbps)</li>
+                <li>
+                  <i class="fas fa-plug"></i> Colokan Listrik di Setiap Meja
+                </li>
+                <li><i class="fas fa-snowflake"></i> AC & Ventilasi Baik</li>
+                <li><i class="fas fa-coffee"></i> Coffee & Snack Bar</li>
+                <li><i class="fas fa-print"></i> Printer & Scanner</li>
+                <li>
+                  <i class="fas fa-users"></i> Ruang Meeting (Kapasitas 8 orang)
+                </li>
+              </ul>
+
+              <h3>Jam Operasional</h3>
+              <p>Senin - Minggu: 07:00 - 23:00 WIB</p>
+
+              <h3>Kebijakan</h3>
+              <ul>
+                <li>Minimum booking 2 jam</li>
+                <li>Pembatalan gratis hingga 2 jam sebelum waktu booking</li>
+                <li>Dilarang merokok di dalam ruangan</li>
+                <li>Makanan dan minuman dari luar tidak diperbolehkan</li>
+              </ul>
+
+              <h3>Ulasan Pengguna</h3>
+              <div class="testimonial-card">
+                <p>
+                  "Tempat yang sangat nyaman untuk bekerja. WiFi cepat dan kopi
+                  enak!"
+                </p>
+                <div class="testimonial-author">- Budi Santoso ⭐⭐⭐⭐⭐</div>
+              </div>
+            </div>
+
+            <div class="detail-sidebar">
+              <div class="price-box">
+                <div class="price">Rp 25.000</div>
+                <p>per jam</p>
+              </div>
+
+              <div class="booking-form">
+                <h3>Pesan Sekarang</h3>
+                <div class="form-group">
+                  <label>Tanggal</label>
+                  <input type="date" id="booking-date" />
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Jam Mulai</label>
+                    <input type="time" id="start-time" />
+                  </div>
+                  <div class="form-group">
+                    <label>Jam Selesai</label>
+                    <input type="time" id="end-time" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Jumlah Orang</label>
+                  <select id="people-count">
+                    <option>1 orang</option>
+                    <option>2 orang</option>
+                    <option>3-5 orang</option>
+                    <option>6-8 orang</option>
+                  </select>
+                </div>
+                <button
+                  class="cta-button"
+                  style="width: 100%"
+                  onclick="bookNow()"
+                >
+                  Pesan via WhatsApp
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="booking" class="page">
+      <div class="container">
+        <div class="booking-form">
+          <h2>Form Booking CWS</h2>
+          <div class="success-message" id="bookingSuccess">
+            Terima kasih Anda telah booking! Tunggu admin CS kami akan follow up
+            status booking Anda.
+          </div>
+          <form id="bookingForm" onsubmit="submitBooking(event)">
+            <div class="form-group">
+              <label>Nama Lengkap</label>
+              <input
+                type="text"
+                id="bookingName"
+                required
+                placeholder="Masukkan nama lengkap"
+              />
+            </div>
+            <div class="form-group">
+              <label>No. HP</label>
+              <input
+                type="tel"
+                id="bookingPhone"
+                required
+                placeholder="08xxxxxxxxxx"
+              />
+            </div>
+            <div class="form-group">
+              <label>Berapa Orang</label>
+              <select id="bookingPeople" required>
+                <option value="">Pilih jumlah orang</option>
+                <option value="1">1 Orang</option>
+                <option value="2">2 Orang</option>
+                <option value="3-5">3-5 Orang</option>
+                <option value="6-10">6-10 Orang</option>
+                <option value="10+">Lebih dari 10 Orang</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Pilih Tempat</label>
+              <select id="bookingLocation" required>
+                <option value="">Pilih lokasi</option>
+                <option value="CWS Cafe Central">
+                  CWS Cafe Central - Jl. Pemuda No. 15
+                </option>
+                <option value="CWS Garden Cafe">
+                  CWS Garden Cafe - Jl. Diponegoro No. 28
+                </option>
+                <option value="CWS Premium Hub">
+                  CWS Premium Hub - Jl. Sudirman No. 45
+                </option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Catatan Khusus</label>
+              <textarea
+                id="bookingNotes"
+                rows="4"
+                placeholder="Tuliskan catatan khusus atau permintaan Anda..."
+              ></textarea>
+            </div>
+            <button
+              type="submit"
+              class="search-button"
+              id="bookingButton"
+              style="width: 100%; padding: 1rem"
+            >
+              <span id="bookingButtonText">Booking Sekarang</span>
+              <span id="bookingLoader" style="display: none">Loading...</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Booking Page -->
+    <div id="booking" class="page">
+      <div class="container">
+        <h1 style="text-align: center; margin: 2rem 0">Konfirmasi Pemesanan</h1>
+
+        <div class="detail-grid">
+          <div class="booking-form">
+            <h3>Data Pemesan</h3>
+            <div class="form-group">
+              <label>Nama Lengkap</label>
+              <input type="text" placeholder="Masukkan nama lengkap" />
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" placeholder="email@example.com" />
+            </div>
+            <div class="form-group">
+              <label>No. WhatsApp</label>
+              <input type="tel" placeholder="08xxxxxxxxxx" />
+            </div>
+            <div class="form-group">
+              <label>Keperluan</label>
+              <textarea
+                placeholder="Jelaskan keperluan Anda..."
+                rows="3"
+                style="
+                  width: 100%;
+                  padding: 0.75rem;
+                  border: 2px solid #e5e7eb;
+                  border-radius: 8px;
+                "
+              ></textarea>
+            </div>
+
+            <h3>Metode Pembayaran</h3>
+            <div style="display: grid; gap: 1rem">
+              <label style="display: flex; align-items: center; gap: 0.5rem">
+                <input type="radio" name="payment" value="transfer" />
+                <span>Transfer Bank (BCA, Mandiri, BNI)</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.5rem">
+                <input type="radio" name="payment" value="ewallet" />
+                <span>E-Wallet (GoPay, OVO, DANA)</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.5rem">
+                <input type="radio" name="payment" value="credit" />
+                <span>Kartu Kredit/Debit</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="detail-sidebar">
+            <h3>Ringkasan Pesanan</h3>
+            <div style="margin-bottom: 1rem">
+              <strong>CWS Cafe Central</strong><br />
+              <small>Jl. Pemuda No. 15, Padang Barat</small>
+            </div>
+            <div style="margin-bottom: 1rem">
+              <div style="display: flex; justify-content: space-between">
+                <span>Tanggal:</span>
+                <span id="summary-date">-</span>
+              </div>
+              <div style="display: flex; justify-content: space-between">
+                <span>Waktu:</span>
+                <span id="summary-time">-</span>
+              </div>
+              <div style="display: flex; justify-content: space-between">
+                <span>Durasi:</span>
+                <span id="summary-duration">-</span>
+              </div>
+              <div style="display: flex; justify-content: space-between">
+                <span>Jumlah Orang:</span>
+                <span id="summary-people">-</span>
+              </div>
+            </div>
+            <hr />
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                font-size: 1.25rem;
+                font-weight: 600;
+                margin: 1rem 0;
+              "
+            >
+              <span>Total:</span>
+              <span id="summary-total">Rp 0</span>
+            </div>
+            <button class="cta-button" style="width: 100%">
+              Konfirmasi Pesanan
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Login Page -->
+    <div id="login" class="page">
+      <div class="container">
+        <div class="auth-container">
+          <h2>Masuk ke CWS</h2>
+
+          <div class="social-login">
+            <button class="social-btn">
+              <i class="fab fa-google"></i> Google
+            </button>
+            <button class="social-btn">
+              <i class="fab fa-facebook"></i> Facebook
+            </button>
+          </div>
+
+          <div style="text-align: center; margin: 1rem 0; color: #6b7280">
+            atau
+          </div>
+
+          <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+              <label>Email</label>
+              <input
+                type="email"
+                id="loginEmail"
+                placeholder="email@example.com"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Password</label>
+              <input
+                type="password"
+                id="loginPassword"
+                placeholder="Password"
+                required
+              />
+            </div>
+            <button type="submit" class="cta-button" style="width: 100%">
+              Masuk
+            </button>
+          </form>
+
+          <div style="text-align: center; margin-top: 1rem">
+            <p>
+              Belum punya akun?
+              <a href="#" onclick="showPage('register')" style="color: #d97706"
+                >Daftar</a
+              >
+            </p>
+            <p><a href="#" style="color: #6b7280">Lupa password?</a></p>
+          </div>
+
+          <div style="text-align: center; margin-top: 2rem">
+            <p>
+              <a
+                href="#"
+                onclick="showPage('owner-login')"
+                style="color: #d97706"
+                >Masuk sebagai Pemilik Tempat</a
+              >
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Register Page -->
+    <div id="register" class="page">
+      <div class="container">
+        <div class="auth-container">
+          <h2>Daftar di CWS</h2>
+
+          <div class="social-login">
+            <button class="social-btn">
+              <i class="fab fa-google"></i> Google
+            </button>
+            <button class="social-btn">
+              <i class="fab fa-facebook"></i> Facebook
+            </button>
+          </div>
+
+          <div style="text-align: center; margin: 1rem 0; color: #6b7280">
+            atau
+          </div>
+
+          <form id="registerForm" onsubmit="handleRegister(event)">
+            <div class="form-group">
+              <label>Nama Lengkap</label>
+              <input
+                type="text"
+                id="registerName"
+                placeholder="Nama lengkap"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input
+                type="email"
+                id="registerEmail"
+                placeholder="email@example.com"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>No. WhatsApp</label>
+              <input
+                type="tel"
+                id="registerPhone"
+                placeholder="08xxxxxxxxxx"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Password</label>
+              <input
+                type="password"
+                id="registerPassword"
+                placeholder="Password"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Konfirmasi Password</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                placeholder="Konfirmasi password"
+                required
+              />
+            </div>
+            <button type="submit" class="cta-button" style="width: 100%">
+              Daftar
+            </button>
+          </form>
+
+          <div style="text-align: center; margin-top: 1rem">
+            <p>
+              Sudah punya akun?
+              <a href="#" onclick="showPage('login')" style="color: #d97706"
+                >Masuk</a
+              >
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Owner Dashboard -->
+    <div id="owner-dashboard" class="page">
+      <div class="dashboard-nav">
+        <div class="container">
+          <ul>
+            <li>
+              <a href="#" onclick="showOwnerSection('overview')">Overview</a>
+            </li>
+            <li>
+              <a href="#" onclick="showOwnerSection('places')">Kelola Tempat</a>
+            </li>
+            <li>
+              <a href="#" onclick="showOwnerSection('bookings')">Reservasi</a>
+            </li>
+            <li>
+              <a href="#" onclick="showOwnerSection('pricing')">Harga & Jam</a>
+            </li>
+            <li>
+              <a href="#" onclick="showOwnerSection('stats')">Statistik</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="dashboard-content">
+          <div id="owner-overview" class="dashboard-section">
+            <h2>Dashboard Pemilik</h2>
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-number">15</div>
+                <div>Reservasi Hari Ini</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number">Rp 2.5M</div>
+                <div>Pendapatan Bulan Ini</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number">4.8</div>
+                <div>Rating Rata-rata</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number">85%</div>
+                <div>Tingkat Okupansi</div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            id="owner-places"
+            class="dashboard-section"
+            style="display: none"
+          >
+            <h2>Kelola Data Tempat</h2>
+            <button class="cta-button" style="margin-bottom: 2rem">
+              Tambah Tempat Baru
+            </button>
+
+            <div class="workspace-card">
+              <div class="workspace-info">
+                <h3>CWS Cafe Central</h3>
+                <p>Jl. Pemuda No. 15, Padang Barat</p>
+                <div style="margin-top: 1rem">
+                  <button class="cta-button" style="margin-right: 1rem">
+                    Edit
+                  </button>
+                  <button
+                    style="
+                      background: #ef4444;
+                      color: white;
+                      padding: 0.5rem 1rem;
+                      border: none;
+                      border-radius: 5px;
+                    "
+                  >
+                    Hapus
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="admin-panel" class="page">
+      <div class="dashboard-nav">
+        <div class="container">
+          <ul>
+            <li>
+              <a href="#" onclick="showAdminSection('overview')">Overview</a>
+            </li>
+            <li>
+              <a href="#" onclick="showAdminSection('users')"
+                >Kelola Pengguna</a
+              >
+            </li>
+            <li>
+              <a href="#" onclick="showAdminSection('owners')"
+                >Kelola Pemilik</a
+              >
+            </li>
+            <li>
+              <a href="#" onclick="showAdminSection('reviews')"
+                >Moderasi Ulasan</a
+              >
+            </li>
+            <li>
+              <a href="#" onclick="showAdminSection('transactions')"
+                >Laporan Transaksi</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="dashboard-content">
+          <div id="admin-overview" class="dashboard-section">
+            <h2>Admin Panel</h2>
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-number">1,250</div>
+                <div>Total Pengguna</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number">45</div>
+                <div>Pemilik Tempat</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number">Rp 125M</div>
+                <div>Total Transaksi</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number">98%</div>
+                <div>Uptime System</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- About Page -->
+    <div id="about" class="page">
+      <div class="container">
+        <div style="text-align: center; padding: 3rem 0">
+          <h1>Tentang CWS</h1>
+          <p
+            style="
+              font-size: 1.25rem;
+              color: #6b7280;
+              max-width: 600px;
+              margin: 1rem auto;
+            "
+          >
+            Co-Working Space dengan konsep cafe terdepan di Padang, Sumatera
+            Barat
+          </p>
+        </div>
+
+        <div class="detail-grid">
+          <div>
+            <h2>Visi Kami</h2>
+            <p>
+              Menjadi platform co-working space terdepan di Sumatera Barat yang
+              menggabungkan produktivitas kerja dengan kenyamanan suasana cafe.
+            </p>
+
+            <h2>Misi Kami</h2>
+            <ul>
+              <li>
+                Menyediakan ruang kerja berkualitas dengan fasilitas modern
+              </li>
+              <li>Membangun komunitas profesional yang saling mendukung</li>
+              <li>Menghadirkan pengalaman kerja yang nyaman dan produktif</li>
+              <li>Mendukung pertumbuhan ekonomi kreatif di Sumatera Barat</li>
+            </ul>
+
+            <h2>Mengapa Memilih CWS?</h2>
+            <p>
+              CWS hadir sebagai solusi bagi para pekerja modern yang membutuhkan
+              ruang kerja fleksibel dengan suasana yang mendukung kreativitas
+              dan produktivitas.
+            </p>
+          </div>
+
+          <div>
+            <div
+              style="background: #f9fafb; padding: 2rem; border-radius: 15px"
+            >
+              <h3>Kontak Kami</h3>
+              <p>
+                <i class="fas fa-map-marker-alt"></i> Jl. Pemuda No. 15, Padang
+                Barat, Sumatera Barat
+              </p>
+              <p><i class="fas fa-phone"></i> +62 751 123456</p>
+              <p><i class="fas fa-envelope"></i> info@cws-padang.com</p>
+              <p><i class="fab fa-whatsapp"></i> +62 812 3456 7890</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Blog Page -->
+    <div id="blog" class="page">
+      <div class="container">
+        <div style="text-align: center; padding: 3rem 0">
+          <h1>Blog CWS</h1>
+          <p style="font-size: 1.25rem; color: #6b7280">
+            Tips produktivitas dan artikel menarik seputar dunia kerja
+          </p>
+        </div>
+
+        <div class="workspace-grid">
+          <div
+            class="workspace-card"
+            onclick="window.open('https://www.entrepreneur.com/article/299608', '_blank')"
+          >
+            <div
+              class="workspace-image"
+              style="
+                background-image: url('https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=350&q=80');
+              "
+            ></div>
+            <div class="workspace-info">
+              <h3>5 Tips Produktif Bekerja di Co-Working Space</h3>
+              <p>
+                Maksimalkan produktivitas Anda dengan tips-tips praktis bekerja
+                di ruang bersama...
+              </p>
+              <small style="color: #6b7280">15 Januari 2025</small>
+            </div>
+          </div>
+
+          <div
+            class="workspace-card"
+            onclick="window.open('https://www.forbes.com/sites/forbescoachescouncil/2021/03/15/15-effective-ways-to-build-your-professional-network/', '_blank')"
+          >
+            <div
+              class="workspace-image"
+              style="
+                background-image: url('https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-4.0.3&auto=format&fit=crop&w=350&q=80');
+              "
+            ></div>
+            <div class="workspace-info">
+              <h3>Membangun Network di Era Digital</h3>
+              <p>
+                Strategi efektif untuk memperluas jaringan profesional melalui
+                co-working space...
+              </p>
+              <small style="color: #6b7280">12 Januari 2025</small>
+            </div>
+          </div>
+
+          <div
+            class="workspace-card"
+            onclick="window.open('https://www.healthline.com/nutrition/how-coffee-affects-your-health', '_blank')"
+          >
+            <div
+              class="workspace-image"
+              style="
+                background-image: url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?ixlib=rb-4.0.3&auto=format&fit=crop&w=350&q=80');
+              "
+            ></div>
+            <div class="workspace-info">
+              <h3>Kopi dan Produktivitas: Kombinasi Sempurna</h3>
+              <p>
+                Bagaimana kopi dapat meningkatkan fokus dan kreativitas dalam
+                bekerja...
+              </p>
+              <small style="color: #6b7280">10 Januari 2025</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Page -->
+    <div id="contact" class="page">
+      <div class="container">
+        <div style="text-align: center; padding: 3rem 0">
+          <h1>Hubungi Kami</h1>
+          <p style="font-size: 1.25rem; color: #6b7280">
+            Kami siap membantu Anda
+          </p>
+        </div>
+
+        <div class="detail-grid">
+          <div class="booking-form">
+            <h3>Kirim Pesan</h3>
+            <div class="form-group">
+              <label>Nama</label>
+              <input type="text" placeholder="Nama lengkap" />
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" placeholder="email@example.com" />
+            </div>
+            <div class="form-group">
+              <label>Subjek</label>
+              <input type="text" placeholder="Subjek pesan" />
+            </div>
+            <div class="form-group">
+              <label>Pesan</label>
+              <textarea
+                placeholder="Tulis pesan Anda..."
+                rows="5"
+                style="
+                  width: 100%;
+                  padding: 0.75rem;
+                  border: 2px solid #e5e7eb;
+                  border-radius: 8px;
+                "
+              ></textarea>
+            </div>
+            <button class="cta-button" style="width: 100%">Kirim Pesan</button>
+          </div>
+
+          <div>
+            <h3>Informasi Kontak</h3>
+            <div style="margin-bottom: 2rem">
+              <h4><i class="fas fa-map-marker-alt"></i> Alamat</h4>
+              <p>
+                Jl. Pemuda No. 15, Padang Barat<br />Kota Padang, Sumatera Barat
+                25117
+              </p>
+            </div>
+
+            <div style="margin-bottom: 2rem">
+              <h4><i class="fas fa-phone"></i> Telepon</h4>
+              <p>+62 751 123456</p>
+            </div>
+
+            <div style="margin-bottom: 2rem">
+              <h4><i class="fab fa-whatsapp"></i> WhatsApp</h4>
+              <p>+62 812 3456 7890</p>
+            </div>
+
+            <div style="margin-bottom: 2rem">
+              <h4><i class="fas fa-envelope"></i> Email</h4>
+              <p>info@cws-padang.com</p>
+            </div>
+
+            <div>
+              <h4><i class="fas fa-clock"></i> Jam Operasional</h4>
+              <p>Senin - Minggu: 07:00 - 23:00 WIB</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ Page -->
+    <div id="faq" class="page">
+      <div class="container">
+        <div style="text-align: center; padding: 3rem 0">
+          <h1>FAQ</h1>
+          <p style="font-size: 1.25rem; color: #6b7280">
+            Pertanyaan yang sering diajukan
+          </p>
+        </div>
+
+        <div style="max-width: 800px; margin: 0 auto">
+          <div class="faq-item" style="margin-bottom: 1rem">
+            <div
+              class="faq-question"
+              style="
+                background: #f9fafb;
+                padding: 1rem;
+                border-radius: 10px;
+                cursor: pointer;
+                font-weight: 600;
+              "
+            >
+              Bagaimana cara melakukan reservasi?
+            </div>
+            <div class="faq-answer" style="padding: 1rem; display: none">
+              Anda dapat melakukan reservasi melalui website kami atau langsung
+              menghubungi WhatsApp. Pilih lokasi, tanggal, dan jam yang
+              diinginkan, lalu lakukan pembayaran.
+            </div>
+          </div>
+
+          <div class="faq-item" style="margin-bottom: 1rem">
+            <div
+              class="faq-question"
+              style="
+                background: #f9fafb;
+                padding: 1rem;
+                border-radius: 10px;
+                cursor: pointer;
+                font-weight: 600;
+              "
+            >
+              Apakah ada minimum waktu booking
+            </div>
+            <div class="faq-answer" style="padding: 1rem; display: none">
+              Ya, minimum waktu booking adalah 2 jam.
+            </div>
+          </div>
+
+          <div class="faq-item" style="margin-bottom: 1rem">
+            <div
+              class="faq-question"
+              style="
+                background: #f9fafb;
+                padding: 1rem;
+                border-radius: 10px;
+                cursor: pointer;
+                font-weight: 600;
+              "
+            >
+              Apakah saya bisa membatalkan reservasi?
+            </div>
+            <div class="faq-answer" style="padding: 1rem; display: none">
+              Anda dapat membatalkan reservasi hingga 2 jam sebelum waktu
+              booking dan mendapatkan pengembalian dana penuh.
+            </div>
+          </div>
+
+          <div class="faq-item" style="margin-bottom: 1rem">
+            <div
+              class="faq-question"
+              style="
+                background: #f9fafb;
+                padding: 1rem;
+                border-radius: 10px;
+                cursor: pointer;
+                font-weight: 600;
+              "
+            >
+              Apakah ada diskon untuk member
+            </div>
+            <div class="faq-answer" style="padding: 1rem; display: none">
+              Ya, kami menawarkan diskon khusus untuk member. Silakan hubungi
+              customer service kami untuk informasi lebih lanjut.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Owner Login -->
+    <div id="owner-login" class="page">
+      <div class="container">
+        <div class="auth-container">
+          <h2>Masuk sebagai Pemilik</h2>
+
+          <form id="ownerLoginForm" onsubmit="handleOwnerLogin(event)">
+            <div class="form-group">
+              <label>Email</label>
+              <input
+                type="email"
+                id="ownerLoginEmail"
+                placeholder="email@example.com"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Password</label>
+              <input
+                type="password"
+                id="ownerLoginPassword"
+                placeholder="Password"
+                required
+              />
+            </div>
+            <button type="submit" class="cta-button" style="width: 100%">
+              Masuk
+            </button>
+          </form>
+
+          <div style="text-align: center; margin-top: 1rem">
+            <p>
+              Belum punya akun?
+              <a href="#" onclick="showPage('register')" style="color: #d97706"
+                >Daftar</a
+              >
+            </p>
+            <p><a href="#" style="color: #6b7280">Lupa password?</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fixed footer structure -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h3>Tentang CWS</h3>
+            <p>
+              Co-Working Space dengan konsep cafe terdepan di Padang, Sumatera
+              Barat. Ruang kerja nyaman dengan suasana cafe yang mendukung
+              produktivitas.
+            </p>
+          </div>
+          <div class="footer-section">
+            <h3>Kontak</h3>
+            <ul>
+              <li><a href="#">📍 Jl. Pemuda No. 15, Padang Barat</a></li>
+              <li><a href="tel:+6275123456">📞 +62 751 123456</a></li>
+              <li>
+                <a href="mailto:info@cws-padang.com">✉️ info@cws-padang.com</a>
+              </li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h3>Link Cepat</h3>
+            <ul>
+              <li><a href="#" onclick="showPage('home')">Beranda</a></li>
+              <li><a href="#" onclick="showPage('search')">Cari Tempat</a></li>
+              <li><a href="#" onclick="showPage('booking')">Booking</a></li>
+              <li><a href="#" onclick="showPage('about')">Tentang</a></li>
+              <li><a href="#" onclick="showPage('blog')">Blog</a></li>
+              <li><a href="#" onclick="showPage('contact')">Kontak</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h3>Jam Operasional</h3>
+            <ul>
+              <li>Senin - Jumat: 08:00 - 22:00</li>
+              <li>Sabtu - Minggu: 09:00 - 21:00</li>
+              <li>Hari Libur: 10:00 - 20:00</li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2024 CWS Co-Working Space Padang. All rights reserved.</p>
+          <p style="margin-top: 0.5rem; font-size: 0.9rem">
+            DESIGNED BY RISA MUBAROKAH, SUMBAR, 2025.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Local storage untuk simulasi database (sementara tanpa Apps Script)
+      let currentSlide = 0;
+      const slides = document.querySelectorAll(".hero-slide");
+
+      function nextSlide() {
+        slides[currentSlide].classList.remove("active");
+        currentSlide = (currentSlide + 1) % slides.length;
+        slides[currentSlide].classList.add("active");
+      }
+
+      // Change slide every 3 seconds
+      setInterval(nextSlide, 3000);
+
+      // Page navigation
+      function showPage(pageId) {
+        // Hide all pages
+        const pages = document.querySelectorAll(".page");
+        pages.forEach((page) => page.classList.remove("active"));
+
+        // Show selected page
+        document.getElementById(pageId).classList.add("active");
+
+        // Close mobile menu
+        document.getElementById("nav-menu").classList.remove("active");
+      }
+
+      // Mobile menu toggle - single event listener
+      const navToggle = document.getElementById("nav-toggle");
+      const navMenu = document.getElementById("nav-menu");
+
+      if (navToggle && navMenu) {
+        navToggle.addEventListener("click", function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          navMenu.classList.toggle("active");
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener("click", function (e) {
+          if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+            navMenu.classList.remove("active");
+          }
+        });
+
+        // Close menu when clicking nav links
+        const navLinks = navMenu.querySelectorAll("a");
+        navLinks.forEach((link) => {
+          link.addEventListener("click", function () {
+            navMenu.classList.remove("active");
+          });
+        });
+      }
+
+      // Initialize default accounts on first load
+      function initializeDefaultAccounts() {
+        if (!localStorage.getItem("users")) {
+          localStorage.setItem("users", JSON.stringify([]));
+        }
+        if (!localStorage.getItem("owners")) {
+          const defaultOwners = [
+            {
+              name: "Admin CWS",
+              email: "admin@cws-padang.com",
+              password: "admin123",
+              role: "owner",
+            },
+          ];
+          localStorage.setItem("owners", JSON.stringify(defaultOwners));
+        }
+        if (!localStorage.getItem("bookings")) {
+          localStorage.setItem("bookings", JSON.stringify([]));
+        }
+      }
+
+      // Updated submitBooking function
+      async function submitBooking(event) {
+        event.preventDefault();
+
+        const button = document.getElementById("bookingButton");
+        const buttonText = document.getElementById("bookingButtonText");
+        const loader = document.getElementById("bookingLoader");
+        const successMessage = document.getElementById("bookingSuccess");
+        const form = document.getElementById("bookingForm");
+
+        // Show loading state
+        button.disabled = true;
+        buttonText.style.display = "none";
+        loader.style.display = "inline";
+
+        const formData = {
+          id: Date.now(),
+          name: document.getElementById("bookingName").value,
+          phone: document.getElementById("bookingPhone").value,
+          people: document.getElementById("bookingPeople").value,
+          location: document.getElementById("bookingLocation").value,
+          notes: document.getElementById("bookingNotes").value,
+          timestamp: new Date().toISOString(),
+          status: "Pending",
+        };
+
+        // Simulate API call
+        setTimeout(() => {
+          try {
+            // Save to localStorage (simulating database)
+            const bookings = JSON.parse(
+              localStorage.getItem("bookings") || "[]"
+            );
+            bookings.push(formData);
+            localStorage.setItem("bookings", JSON.stringify(bookings));
+
+            // Reset button state
+            button.disabled = false;
+            buttonText.style.display = "inline";
+            loader.style.display = "none";
+
+            // Show success message
+            successMessage.style.display = "block";
+            successMessage.innerHTML =
+              "Terima kasih sudah mengisi form booking! Data berhasil disimpan. Admin kami akan menghubungi Anda.";
+            successMessage.className = "success-message";
+
+            // Reset form
+            form.reset();
+
+            // Hide success message after 5 seconds
+            setTimeout(() => {
+              successMessage.style.display = "none";
+            }, 5000);
+
+            console.log("Booking saved:", formData);
+          } catch (error) {
+            // Reset button state
+            button.disabled = false;
+            buttonText.style.display = "inline";
+            loader.style.display = "none";
+
+            // Show error message
+            successMessage.style.display = "block";
+            successMessage.innerHTML = "Terjadi kesalahan. Silakan coba lagi.";
+            successMessage.style.background = "#fee2e2";
+            successMessage.style.color = "#dc2626";
+
+            setTimeout(() => {
+              successMessage.style.display = "none";
+            }, 5000);
+          }
+        }, 1500);
+      }
+
+      // Function to show workspace detail page
+      function showWorkspaceDetail(workspaceId) {
+        showPage("workspace-detail");
+        // You can add logic here to fetch and display details for the selected workspace
+        // For example, you can use workspaceId to identify the workspace and update the content of the detail page
+        document.getElementById("workspace-title").innerText =
+          "Detail " + workspaceId;
+      }
+
+      // Updated handleLogin function
+      function handleLogin(event) {
+        event.preventDefault();
+
+        const email = document.getElementById("loginEmail").value;
+        const password = document.getElementById("loginPassword").value;
+
+        // Get users from localStorage
+        const users = JSON.parse(localStorage.getItem("users") || "[]");
+        const user = users.find(
+          (u) => u.email === email && u.password === password
+        );
+
+        if (user) {
+          alert("Login berhasil! Selamat datang " + user.name);
+          updateNavbarForLoggedInUser(user);
+          showPage("home");
+          document.getElementById("loginForm").reset();
+        } else {
+          alert(
+            "Email atau password salah. Silakan coba lagi atau daftar terlebih dahulu."
+          );
+        }
+      }
+
+      // Updated handleRegister function
+      function handleRegister(event) {
+        event.preventDefault();
+
+        const name = document.getElementById("registerName").value;
+        const email = document.getElementById("registerEmail").value;
+        const phone = document.getElementById("registerPhone").value;
+        const password = document.getElementById("registerPassword").value;
+        const confirmPassword =
+          document.getElementById("confirmPassword").value;
+
+        // Validation
+        if (password !== confirmPassword) {
+          alert("Password dan konfirmasi password tidak sama!");
+          return;
+        }
+
+        // Check if email already exists
+        const users = JSON.parse(localStorage.getItem("users") || "[]");
+        if (users.find((u) => u.email === email)) {
+          alert(
+            "Email sudah terdaftar. Silakan gunakan email lain atau login."
+          );
+          return;
+        }
+
+        // Add new user
+        const newUser = {
+          id: Date.now(),
+          name: name,
+          email: email,
+          phone: phone,
+          password: password,
+          timestamp: new Date().toISOString(),
+          role: "user",
+        };
+
+        users.push(newUser);
+        localStorage.setItem("users", JSON.stringify(users));
+
+        alert("Registrasi berhasil! Silakan login dengan akun Anda.");
+        showPage("login");
+        document.getElementById("registerForm").reset();
+      }
+
+      // Updated handleOwnerLogin function
+      function handleOwnerLogin(event) {
+        event.preventDefault();
+
+        const email = document.getElementById("ownerLoginEmail").value;
+        const password = document.getElementById("ownerLoginPassword").value;
+
+        // Get owners from localStorage
+        const owners = JSON.parse(localStorage.getItem("owners") || "[]");
+        const owner = owners.find(
+          (o) => o.email === email && o.password === password
+        );
+
+        if (owner) {
+          alert("Login berhasil! Selamat datang " + owner.name);
+          showPage("owner-dashboard");
+          document.getElementById("ownerLoginForm").reset();
+        } else {
+          alert(
+            "Email atau password salah. Gunakan: admin@cws-padang.com / admin123"
+          );
+        }
+      }
+
+      // New function to update navbar after login
+      function updateNavbarForLoggedInUser(user) {
+        const navMenu = document.getElementById("nav-menu");
+        const loginLink = navMenu.querySelector(
+          "a[onclick=\"showPage('login')\"]"
+        ).parentElement;
+
+        loginLink.innerHTML = `<a onclick="logout()">${user.name} (Logout)</a>`;
+      }
+
+      // New logout function
+      function logout() {
+        const navMenu = document.getElementById("nav-menu");
+        const userLink = navMenu.querySelector("li:last-child");
+        userLink.innerHTML = "<a onclick=\"showPage('login')\">Masuk</a>";
+        alert("Anda telah logout");
+        showPage("home");
+      }
+
+      // Function to show owner dashboard sections
+      function showOwnerSection(sectionId) {
+        const sections = document.querySelectorAll(".dashboard-section");
+        sections.forEach((section) => (section.style.display = "none"));
+        document.getElementById("owner-" + sectionId).style.display = "block";
+      }
+
+      // Function to show admin panel sections
+      function showAdminSection(sectionId) {
+        const sections = document.querySelectorAll(".dashboard-section");
+        sections.forEach((section) => (section.style.display = "none"));
+        document.getElementById("admin-" + sectionId).style.display = "block";
+      }
+
+      // FAQ Accordion
+      document.querySelectorAll(".faq-question").forEach((question) => {
+        question.addEventListener("click", () => {
+          const answer = question.nextElementSibling;
+          if (answer.style.display === "block") {
+            answer.style.display = "none";
+          } else {
+            answer.style.display = "block";
+          }
+        });
+      });
+
+      function createParticles() {
+        const container = document.querySelector(".particles-container");
+        if (!container) return;
+
+        setInterval(() => {
+          const particle = document.createElement("div");
+          particle.className = "particle";
+          particle.style.left = Math.random() * 100 + "%";
+          particle.style.animationDuration = Math.random() * 3 + 4 + "s";
+          particle.style.animationDelay = Math.random() * 2 + "s";
+
+          container.appendChild(particle);
+
+          setTimeout(() => {
+            if (particle.parentNode) {
+              particle.parentNode.removeChild(particle);
+            }
+          }, 8000);
+        }, 300);
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        // Initialize default accounts
+        initializeDefaultAccounts();
+
+        // Slideshow functionality
+        let currentSlide = 0;
+        const slides = document.querySelectorAll(".hero-slide");
+
+        function showSlide(index) {
+          slides.forEach((slide) => slide.classList.remove("active"));
+          slides[index].classList.add("active");
+        }
+
+        function nextSlide() {
+          currentSlide = (currentSlide + 1) % slides.length;
+          showSlide(currentSlide);
+        }
+
+        // Initialize slideshow
+        if (slides.length > 0) {
+          showSlide(0);
+          setInterval(nextSlide, 3000);
+        }
+
+        // Particle animation
+        createParticles();
+      });
+    </script>
+  </body>
+</html>
